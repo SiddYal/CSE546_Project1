@@ -1,0 +1,3 @@
+AWS Root:
+Access Key: AKIA5JBSSMYHRJSNMT4A
+Secret Access Key: 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
