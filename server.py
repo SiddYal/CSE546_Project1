@@ -6,8 +6,8 @@ import os
 
 app = Flask(__name__)
 
-s3 = boto3.client('s3')
-sdb = boto3.client('sdb')
+s3 = boto3.client('s3', region_name="us-east-1")
+sdb = boto3.client('sdb', region_name="us-east-1")
 
 """
 bucket_name = '1222045786-in-bucket'
