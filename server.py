@@ -34,16 +34,19 @@ bucket_name = '1222045786-in-bucket'
 s3.create_bucket(Bucket=bucket_name)
 
 db_name = '1222045786-simpleDB'
+sdb.delete_domain(DomainName=db_name)
 sdb.create_domain(DomainName=db_name)
 
 def populate_simpledb_from_csv():
     with open('classification_results.csv', mode='r') as csvfile:
         reader = csv.reader(csvfile)
         next(reader)
+        #count = 0
         for row in reader:
             #print(row)
             image, result = row
-            #print(f"{filename}, {label}")
+            #print(f"{count}: {image}, {result}")
+            #count = count + 1
             sdb.put_attributes(DomainName=db_name, ItemName=image,Attributes= 
                     [{
                         'Name': 'result',
@@ -51,6 +54,11 @@ def populate_simpledb_from_csv():
                         'Replace': True
                     }]
                 )
+            #domain_metadata = sdb.domain_metadata(DomainName=db_name)
+            #item_count = domain_metadata.get('ItemCount')
+            #print(item_count)
+           
+        #print(count)
 
 
 @app.route('/', methods=['POST'])
@@ -71,6 +79,9 @@ def handle_post_request():
     #print(f"File {filename} uploaded.")
 
     truncfilename, ext = os.path.splitext(filename)
+    #domain_metadata = sdb.domain_metadata(DomainName=db_name)
+    #item_count = domain_metadata.get('ItemCount')
+    #print(item_count)
     
     result = sdb.get_attributes(
                 DomainName=db_name,
@@ -88,4 +99,4 @@ def handle_post_request():
 if __name__ == '__main__':
     #print(sdb.DomainMetadata(db_name))
     populate_simpledb_from_csv()
-    app.run(debug=True,host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8000)
