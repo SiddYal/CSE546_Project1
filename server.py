@@ -65,16 +65,16 @@ def populate_simpledb_from_csv():
 def handle_post_request():
     if 'inputFile' not in request.files:
         return jsonify({'error': 'No file part with key "inputFile"'}), 400
-
+    print("check1")
     file = request.files['inputFile']
-
+    print("check2")
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
-
+    print("check3")
     # Secure filename and save
     filename = secure_filename(file.filename)
     print(type(filename))
-
+    
     s3.upload_file(filename, bucket_name, filename)
     #print(f"File {filename} uploaded.")
 
