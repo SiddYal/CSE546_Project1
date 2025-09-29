@@ -74,23 +74,28 @@ def handle_post_request():
     # Secure filename and save
     filename = secure_filename(file.filename)
     print(type(filename))
-    
+
     s3.upload_file(filename, bucket_name, filename)
     #print(f"File {filename} uploaded.")
-
+    print("check4")
     truncfilename, ext = os.path.splitext(filename)
     #domain_metadata = sdb.domain_metadata(DomainName=db_name)
     #item_count = domain_metadata.get('ItemCount')
     #print(item_count)
-    
+    print("check5")
     result = sdb.get_attributes(
                 DomainName=db_name,
                 ItemName=truncfilename
             )
+    print("check6")
     attributes = result.get("Attributes", [])
+    print("check7")
     if not attributes:
+        print("check8")
         return Response(f"{truncfilename}:Unknown", mimetype="text/plain")
+    print("check9")
     result = next((attr["Value"] for attr in attributes if attr["Name"] == "result"), "Unknown")
+    print("check10")
     print(f"{truncfilename}:{result}")
     return Response(f"{truncfilename}:{result}", mimetype="text/plain")
 
